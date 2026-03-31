@@ -8,19 +8,14 @@ exports.authenticate = (req, res, next) => {
                 message: "nop tokken provided"
             })
         }
-        // console.log("HEADER:", req.headers.authorization);
         const token = autheader.split(" ")[1]
-        // console.log("JWT_SECRET:", process.env.JWT_SECRET);
-        // console.log("tokken", token)
         const decode = jwt.verify(token, process.env.JWT_SECRET)
-        console.log("decode", decode)
         req.user = decode
         next()
     } catch (err) {
-        console.log("JWT ERROR:", err);   // 👈 IMPORTANT
-        console.log("MESSAGE:", err.message);
         return res.status(401).json({
-            message: "invalid  or expired token"
+            message: "invalid  or expired token",
+            err: err.message
         })
     }
 }
